@@ -1,3 +1,4 @@
+pub mod device_catalog;
 pub mod framing;
 pub mod mobile_power;
 pub mod models;

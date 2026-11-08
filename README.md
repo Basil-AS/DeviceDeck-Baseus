@@ -26,6 +26,12 @@ Only hardware-verified models are supported. Earlier drafts included Inspire XH1
 support extracted from the Baseus Android APK, but since none was ever confirmed on a real
 device it has been removed rather than ship promises we can't back.
 
+The official Baseus app's EU model dictionary also lists 149 device names and GATT
+profiles, including Blade 2, Bowie 30, Bowie MF1, and Bass EP10 Pro. Those entries are
+now available in the protocol crate as an **app discovery catalog**, not as control support: models sharing UUIDs may use different protocols. See
+[the catalog notes](docs/protocol/baseus-app-device-catalog.md). The Blade 2-140
+app-layer codec is research-grade and still needs a device transport and hardware validation.
+
 **Own a different Baseus model?** Adding it is the goal. With an Android phone you can
 record what the official app sends in about 15 minutes, with no root or PC tools — see
 [docs/capture-your-model.md](docs/capture-your-model.md). That's how the BP1 Ultra was added.
