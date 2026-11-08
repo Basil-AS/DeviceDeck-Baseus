@@ -2,17 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   rust:
     strategy:
       fail-fast: false
       matrix:
-        # Linux compiles the BlueZ-only paths (cfg(target_os = "linux")) that Windows skips.
-        os: [windows-latest, ubuntu-22.04]
+        # Exercise btleplug and the Tauri workspace across all intended desktop OSes.
+        os: [windows-latest, ubuntu-22.04, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

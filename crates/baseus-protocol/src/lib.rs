@@ -1,4 +1,5 @@
 pub mod framing;
+pub mod mobile_power;
 pub mod models;
 pub mod types;
 
