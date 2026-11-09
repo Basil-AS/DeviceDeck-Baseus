@@ -25,7 +25,7 @@ write text: 9A AA 10 00 30 00 01 BYTE_LEN 01 UTF8_BYTES... CRC_H CRC_L
 | Reminder / auto-off | `001E`, `001F` | Read and write countdown values; app clamps displayed values at 1440 minutes. |
 | Type-C measurements | `0001`–`000C`, `0012` | Two ports show input/output voltage, current, power and protocol. Statistic values use `raw / response_multiplier`. |
 | Cell statistics | `0025`, `0026`, `0028`–`002D`, `0031`–`0036` | Temperature, cycle count, six cell voltages and six cell currents; `0010` also feeds six displayed cell-status bits at bit positions 6–11. |
-| Port toggles | `0018`–`001B` | App writes 0/1 based on the state parsed from code `0010`. Exact mapping of each code to the physical port needs a live trace. |
+| Port toggles | `0018`–`001B` | `StatisticsFragmentViewModel` groups `0018`/`0019` under the first Type-C port (`C1`) and `001A`/`001B` under the second (`C2`). The UI chooses between each pair from the corresponding two-bit state in `0010`, then writes `0000` or `0001`. This establishes the app's C1/C2 mapping, but not which physical connector is C1/C2 on every Blade 2 revision or the firmware's precise enable/disable semantics. |
 | Statistics session | `0037`, `0038` | App enables/polls these while the statistics view is active and sends 0 on exit. Semantics are not named by the static code. |
 | Defaults reset | `000E` | A reset write exists in the app. Not exposed by this codec and should require an explicit user-confirmation flow if ever added. |
 
@@ -33,9 +33,9 @@ Protocol labels for `0012` include PPS, PD 3.0, QC 2.0/3.0, AFC, FCP and SCP, wi
 
 ## Validation status and next capture
 
-- Static builder/parser paths and code-to-UI mappings are confirmed in the APK.
+- Static builder/parser paths and code-to-UI mappings are confirmed in the APK, including command pairs grouped by the app as C1 (`0018`/`0019`) and C2 (`001A`/`001B`).
 - The value multiplier, physical units, CRC behavior on a real unit, BLE UUIDs, notification framing and success/readback behavior are **not** hardware-verified.
-- Capture a Blade 2-140 session with the official app: save GATT service/characteristics, one read and response per code, then separately change theme, screen text, screen-saver, each timer and each port state. Record firmware and verify the displayed values against a USB-C meter before enabling live writes.
+- Capture a Blade 2-140 session with the official app: save GATT service/characteristics, one read and response per code, then separately change theme, screen text, screen-saver, each timer and each port state. Confirm which physical connector the app calls C1/C2 and the state transitions for each command. Record firmware and verify the displayed values against a USB-C meter before enabling live writes.
 - Do not add model registration, discovery matching or writes that affect charging/battery safety until the transport and command mapping are verified.
 
 ## Code provenance
